@@ -10,8 +10,10 @@ export type Choices = {
 };
 type ChoiceKey = keyof Choices;
 type ChoiceValue = Choices[ChoiceKey];
-type Timings = { wait?: number; total?: number };
+type Timings = { wait?: number | undefined; total?: number | undefined };
 type State = Choices & { timings: Timings };
+type Option = { value: ChoiceValue; name: string };
+type Group = { key: ChoiceKey; options: [Option, ...Option[]] };
 
 export const groups = [
   ...Object.entries(config.axes).map(([key, options]) => ({
@@ -22,7 +24,7 @@ export const groups = [
     key,
     options: values.map((value) => ({ value, name: String(value) })),
   })),
-] as { key: ChoiceKey; options: { value: ChoiceValue; name: string }[] }[];
+] as [Group, ...Group[]];
 
 const defaults = Object.fromEntries(
   groups.map(({ key, options }) => [key, options[0].value]),
@@ -42,8 +44,12 @@ function initial(): State {
   if (typeof window === "undefined") return { ...defaults, timings: {} };
   let stored: Partial<Choices> = {};
   try {
-    const saved = JSON.parse(sessionStorage.getItem(storageKey) ?? "{}");
-    stored = parseChoices((key) => String(saved?.[key]));
+    const saved: unknown = JSON.parse(
+      sessionStorage.getItem(storageKey) ?? "{}",
+    );
+    const record: Record<string, unknown> =
+      typeof saved === "object" && saved !== null ? { ...saved } : {};
+    stored = parseChoices((key) => String(record[key]));
   } catch {
     // A stale or unavailable session must not prevent the prototype from opening.
   }
@@ -58,7 +64,9 @@ const listeners = new Set<() => void>();
 function persist() {
   if (typeof window === "undefined") return;
   try {
-    const { timings: _timings, ...choices } = state;
+    const choices = Object.fromEntries(
+      groups.map(({ key }) => [key, state[key]]),
+    );
     sessionStorage.setItem(storageKey, JSON.stringify(choices));
   } catch {
     // URL choices still work when browser storage is unavailable.

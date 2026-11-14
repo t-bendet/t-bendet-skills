@@ -6,12 +6,14 @@ const pill = (active: boolean) =>
   "rounded-full px-2 py-1 hover:bg-fuchsia-800 " +
   (active ? "bg-fuchsia-500 text-fuchsia-950" : "");
 const [firstAxis, ...otherGroups] = groups;
+const ownsArrowKeys =
+  "input, textarea, select, [role=tree], [role=listbox], [role=grid], [role=tablist]";
 
 function cycle(delta: number) {
   const { key, options } = firstAxis;
   const index = options.findIndex(({ value }) => value === proto()[key]);
   const next = options[(index + delta + options.length) % options.length];
-  setProto({ [key]: next.value });
+  if (next) setProto({ [key]: next.value });
 }
 
 export function PrototypeSwitcher() {
@@ -32,7 +34,7 @@ export function PrototypeSwitcher() {
       const target = event.target;
       if (
         target instanceof HTMLElement &&
-        (target.closest("input, textarea, select") || target.isContentEditable)
+        (target.closest(ownsArrowKeys) || target.isContentEditable)
       ) {
         return;
       }
@@ -54,7 +56,7 @@ export function PrototypeSwitcher() {
         type="button"
         aria-label="Expand the prototype bar"
         onClick={() => setCollapsed(false)}
-        className="fixed right-3 bottom-3 z-100 rounded-full border-2 border-fuchsia-500 bg-fuchsia-950/95 px-3 py-1.5 font-mono text-xs text-fuchsia-50 shadow-2xl"
+        className="fixed right-3 bottom-3 z-[100] rounded-full border-2 border-fuchsia-500 bg-fuchsia-950/95 px-3 py-1.5 font-mono text-xs text-fuchsia-50 shadow-2xl"
       >
         proto {state[firstAxis.key]}
       </button>
@@ -68,7 +70,7 @@ export function PrototypeSwitcher() {
   return (
     <div
       data-prototype-switcher
-      className="pointer-events-none fixed inset-x-0 bottom-3 z-100 flex justify-center px-3"
+      className="pointer-events-none fixed inset-x-0 bottom-3 z-[100] flex justify-center px-3"
     >
       <div className="pointer-events-auto flex max-w-full flex-col items-center gap-1 rounded-2xl border-2 border-fuchsia-500 bg-fuchsia-950/95 px-3 py-1.5 font-mono text-xs text-fuchsia-50 shadow-2xl backdrop-blur">
         <div className="flex flex-wrap items-center justify-center gap-x-2">
@@ -101,31 +103,36 @@ export function PrototypeSwitcher() {
             ▾
           </button>
         </div>
-        {otherGroups.map(({ key: groupKey, options }) => (
-          <div
-            key={groupKey}
-            role="group"
-            aria-label={groupKey}
-            className="flex flex-wrap items-center justify-center gap-1"
-          >
-            <span className="opacity-60">{groupKey}</span>
-            {options.map(({ value, name }) => (
-              <button
-                key={String(value)}
-                type="button"
-                title={name}
-                aria-pressed={state[groupKey] === value}
-                onClick={() => setProto({ [groupKey]: value })}
-                className={pill(state[groupKey] === value)}
-              >
-                {String(value)}
-              </button>
-            ))}
-            <span className="opacity-80">
-              {options.find(({ value }) => value === state[groupKey])?.name}
-            </span>
-          </div>
-        ))}
+        {otherGroups.map(({ key: groupKey, options }) => {
+          const current = options.find(
+            ({ value }) => value === state[groupKey],
+          );
+          return (
+            <div
+              key={groupKey}
+              role="group"
+              aria-label={groupKey}
+              className="flex flex-wrap items-center justify-center gap-1"
+            >
+              <span className="opacity-60">{groupKey}</span>
+              {options.map(({ value, name }) => (
+                <button
+                  key={String(value)}
+                  type="button"
+                  title={name}
+                  aria-pressed={state[groupKey] === value}
+                  onClick={() => setProto({ [groupKey]: value })}
+                  className={pill(state[groupKey] === value)}
+                >
+                  {String(value)}
+                </button>
+              ))}
+              {current && current.name !== String(current.value) && (
+                <span className="opacity-80">{current.name}</span>
+              )}
+            </div>
+          );
+        })}
         {/* extras: add session-specific controls here, such as a last-nav timing
             readout from state.timings or a /checkout-only thank-you button. */}
       </div>

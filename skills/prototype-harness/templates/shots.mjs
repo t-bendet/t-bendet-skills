@@ -1,3 +1,4 @@
+/* global process, URL, console */
 import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -124,7 +125,6 @@ try {
         if (phase !== "" && phase !== "settled") {
           throw new Error('Capture phase must be empty or "settled"');
         }
-        await page.addStyleTag({ content: hideChrome });
         const path = join(output, `${name}${phase ? `-${phase}` : ""}.png`);
         await page.screenshot({ path, fullPage: true, style: hideChrome });
         console.log(path);

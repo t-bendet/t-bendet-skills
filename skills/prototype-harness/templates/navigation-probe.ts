@@ -2,7 +2,10 @@ import type { QueryClient, QueryKey } from "@tanstack/react-query";
 import { createContext, type MiddlewareFunction } from "react-router";
 import { proto, setTimings } from "./store";
 
-const timingContext = createContext<{ start: number; wait?: number }>();
+const timingContext = createContext<{
+  start: number;
+  wait: number | undefined;
+}>();
 
 export const probeStart: MiddlewareFunction = async (
   { context, request },
@@ -26,9 +29,13 @@ export const probeStart: MiddlewareFunction = async (
   }
 };
 
-function destinationKeys(_pathname: string): QueryKey[] {
-  // Map each route pattern to the app's query keys before comparing cold navigations.
-  return [];
+// Map each route pattern to the app's query keys before comparing cold navigations.
+const routeKeys: [pattern: RegExp, keys: QueryKey[]][] = [];
+
+function destinationKeys(pathname: string): QueryKey[] {
+  return routeKeys.flatMap(([pattern, keys]) =>
+    pattern.test(pathname) ? keys : [],
+  );
 }
 
 export const probeAfterUser =

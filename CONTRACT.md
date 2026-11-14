@@ -6,7 +6,8 @@ the interface: rename one in a guide and the skill that cites it stops finding i
 
 `setup-t-bendet-skills` scaffolds the guides a repo lacks from the templates in
 [its folder](skills/setup-t-bendet-skills/). `scripts/check-contract.sh <repo>` reports every
-required name a repo is missing and every `<FILL: ...>` marker a template left unfilled.
+required name a repo is missing and every `<FILL: ...>` marker a template left unfilled. It reads
+files only: `setup-t-bendet-skills` checks that the labels exist in the tracker.
 
 ## Guides
 
@@ -84,8 +85,8 @@ criterion **quotes the roadmap line** its PR removes, and a ticket to be reviewe
 - `## Install sites`: the prototype folder, and the layout, API-client, router and query-client
   files the harness touches.
 - `## Query keys`: the route-pattern to query-key mapping for cold-cache comparisons.
-- `## Screenshot run`: the dev origin, where Playwright resolves from, the sign-in request, the
-  output folder. A repo without Playwright or a sign-in says so, and what a prototype branch adds.
+- `## Screenshot run`: bullets starting `Dev origin:`, `Playwright resolves from:`, `Sign-in:` and
+  `Output folder:`. A repo without Playwright or a sign-in says so, and what a prototype branch adds.
 - `## Lessons`: what earlier prototypes in this repo taught; empty until the first one closes.
 
 ## The entrypoint

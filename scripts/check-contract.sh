@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Reports every name from CONTRACT.md that a consuming repo lacks, each once.
 # Usage: check-contract.sh <repo> [batch-tickets] [roadmap-batch] [prototype-harness]
+# Reads files only: whether the labels exist in the tracker is setup's check, and a
+# "Human first:" line is required only while a group has an open decision.
 set -u
 
 repo="${1:?usage: check-contract.sh <repo> [skill...]}"
@@ -121,6 +123,14 @@ for skill in $skills; do
     prototype-harness)
       for name in "Install sites" "Query keys" "Screenshot run" "Lessons"; do
         section "$harness" "$name"
+      done
+      for row in "Prototype folder" "Root layout" "API client" "Router"; do
+        need_in "$harness" "Install sites" "^\\| $row +\\|.*\`" "## Install sites: a '$row' row with a path"
+      done
+      need_in "$harness" "Install sites" "[Qq]uery client" "## Install sites: where the query client is"
+      need_in "$harness" "Query keys" "^\\|.*\`" "## Query keys: a route-pattern row"
+      for fact in "Dev origin" "Playwright resolves from" "Sign-in" "Output folder"; do
+        need_in "$harness" "Screenshot run" "^- $fact:" "## Screenshot run: a '$fact:' bullet"
       done
       linked "$harness"
       ;;
