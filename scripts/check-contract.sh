@@ -113,7 +113,7 @@ for skill in $skills; do
         section "$roadmap" "How the roadmap is worked"
         section "$roadmap" "Parked"
         need_in "$roadmap" "How the roadmap is worked" "^\*\*Closing re-triage" "the **Closing re-triage** checklist"
-        need_in "$roadmap" "How the roadmap is worked" "^- \[ \]" "the **Closing re-triage** checklist items"
+        need_in "$roadmap" "How the roadmap is worked" "^(- \[ \]|[0-9]+\.) " "the **Closing re-triage** checklist items (checkboxes or a numbered list)"
         optional "$roadmap" "^### [0-9]+\. " "no numbered group (### <n>. <name>) left to batch"
         linked "$roadmap"
       elif [ -f "$repo/$group" ]; then

@@ -1,6 +1,6 @@
 {
   "name": "t-bendet-skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Agent skills for shipping a queue of tickets unattended, turning roadmap items into specced issues, and prototyping UI variants in a React client. Repo facts come from guides under docs/agents/.",
   "author": {
     "name": "t-bendet",
