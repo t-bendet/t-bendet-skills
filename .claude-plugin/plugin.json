@@ -1,0 +1,15 @@
+{
+  "name": "t-bendet-skills",
+  "description": "Agent skills for shipping a queue of tickets unattended, turning roadmap items into specced issues, and prototyping UI variants in a React client. Repo facts come from guides under docs/agents/.",
+  "author": {
+    "name": "t-bendet",
+    "url": "https://github.com/t-bendet"
+  },
+  "homepage": "https://github.com/t-bendet/t-bendet-skills",
+  "repository": "https://github.com/t-bendet/t-bendet-skills",
+  "license": "MIT",
+  "keywords": ["skills", "tickets", "roadmap", "prototype", "automation"],
+  "dependencies": [
+    { "name": "mattpocock-skills", "marketplace": "claude-plugins-official" }
+  ]
+}

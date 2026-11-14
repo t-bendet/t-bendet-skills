@@ -25,11 +25,25 @@ the guides and the exact section and operation names the skills cite.
 - `prototype-harness` only: React, Vite, React Router middleware, TanStack Query, axios, Tailwind,
   and Playwright for the screenshot matrix.
 
+## Install
+
+```bash
+claude plugin marketplace add t-bendet/t-bendet-skills
+```
+
+```bash
+claude plugin install t-bendet-skills@t-bendet --scope project
+```
+
+The install also installs and enables `mattpocock-skills` from the `claude-plugins-official`
+marketplace at the same scope. Installed skills are named `t-bendet-skills:<name>`.
+
 ## Using it in a repo
 
 1. Run `setup-t-bendet-skills` in the repo. It writes the missing guides from templates and the
    repo's own evidence.
-2. Check the result:
+2. Check the result with the script in this repo (in an install, under the plugin's `installPath`
+   in `~/.claude/plugins/installed_plugins.json`):
 
    ```bash
    scripts/check-contract.sh /path/to/repo
@@ -37,8 +51,8 @@ the guides and the exact section and operation names the skills cite.
 
    Name skills after the path to check only those: `scripts/check-contract.sh /path/to/repo batch-tickets`.
 
-The repo is laid out as a plugin (`skills/<name>/SKILL.md`) but ships no plugin manifest yet. Until
-it does, clone it and symlink each skill folder into the repo's skills directory:
+Without the plugin system, clone the repo and symlink each skill folder into the repo's skills
+directory:
 
 ```bash
 ln -s /path/to/t-bendet-skills/skills/batch-tickets .claude/skills/batch-tickets
