@@ -3,7 +3,6 @@ import { mkdir } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { config } from "./config.ts";
 
 // repo: fill this block from the repo's harness guide, "Screenshot run".
 const repoSettings = {
@@ -22,8 +21,25 @@ while (!existsSync(join(repo, ".git"))) {
   if (parent === repo) throw new Error("Cannot find the repository root");
   repo = parent;
 }
-const require = createRequire(join(repo, repoSettings.playwrightFrom));
-const { chromium, request } = require("@playwright/test");
+let config;
+try {
+  ({ config } = await import("./config.ts"));
+} catch (cause) {
+  throw new Error(
+    "Cannot load config.ts: this script needs a Node that runs TypeScript files directly (22.18 or newer)",
+    { cause },
+  );
+}
+let chromium, request;
+try {
+  const require = createRequire(join(repo, repoSettings.playwrightFrom));
+  ({ chromium, request } = require("@playwright/test"));
+} catch (cause) {
+  throw new Error(
+    `Cannot load @playwright/test from ${repoSettings.playwrightFrom}: point repoSettings.playwrightFrom at a package.json that depends on it`,
+    { cause },
+  );
+}
 const topic = basename(folder);
 const [filter = "", origin = repoSettings.origin] = process.argv.slice(2);
 const output = join(repo, repoSettings.output, topic);

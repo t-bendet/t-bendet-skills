@@ -1,6 +1,6 @@
 # Roadmap
 
-<What this file is: intent not yet specced into issues. Issues hold specced work.>
+<FILL: What this file is: intent not yet specced into issues. Issues hold specced work.>
 
 ## How the roadmap is worked
 
@@ -29,13 +29,13 @@ closing re-triage removes the group block.
 
 ## Groups in order
 
-### 1. <Group name>
+### 1. <FILL: Group name>
 
-Human first: <the open decision and who or which skill settles it. Delete this line when the group
+Human first: <FILL: the open decision and who or which skill settles it. Delete this line when the group
 has none; mark it resolved with a link when the decision lands.>
 
-- <Item line: one outcome, one sentence. A slice's PR removes it.>
+- <FILL: Item line: one outcome, one sentence. A slice's PR removes it.>
 
 ## Parked
 
-- <Item no batch may take, with the reason.>
+- <FILL: Item no batch may take, with the reason.>

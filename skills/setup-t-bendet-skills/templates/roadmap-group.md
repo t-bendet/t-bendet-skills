@@ -18,11 +18,11 @@ Tracker operations (sub-issues, blocking edges, labels) are in the
 
 ## Roadmap file
 
-`<path to the roadmap, e.g. docs/ROADMAP.md>`
+`<FILL: path to the roadmap, e.g. docs/ROADMAP.md>`
 
 ## Parent issue
 
-Title: the group's roadmap heading. Labels: `<feature type label>`.
+Title: the group's roadmap heading. Labels: `<FILL: feature type label>`.
 
 ```markdown
 ## What to build
@@ -35,7 +35,7 @@ Decisions that shape every slice:
 - <Each decision the human ticket settled, with its link.>
 - Every slice's last acceptance criterion quotes the roadmap item line its PR removes and names
   any roadmap fact the change makes false; the PR edits the roadmap file.
-- <The test every slice ships, e.g. its own E2E, named in its criteria.>
+- <FILL: the test every slice ships, e.g. its own E2E, named in its criteria.>
 - The first slice that introduces a new seam carries `Merge policy: stop at PR open`; every other
   slice auto-merges on green.
 - The closing re-triage is the last sub-issue, blocked by every other slice; its PR closes this
@@ -59,7 +59,7 @@ them.
 
 ## Slice issue
 
-A sub-issue of the parent, labels `<feature type label>` and `ready-for-agent`, blocking edges
+A sub-issue of the parent, labels `<FILL: feature type label>` and `ready-for-agent`, blocking edges
 native. The body is the `mattpocock-skills:to-tickets` issue template; its acceptance criteria end
 with the standing tail. Domain vocabulary, no file paths or snippets, as that skill says.
 
@@ -71,7 +71,7 @@ with the standing tail. Domain vocabulary, no file paths or snippets, as that sk
 <Merge policy: stop at PR open — only on the slice that opens a new seam>
 
 - [ ] <criterion>
-- [ ] <The standing test criterion from the parent>
+- [ ] <FILL: the standing test criterion, matching the parent's bullet>
 - [ ] The roadmap's group <N> line "<quoted item line>" is removed<, and "<quoted fact>" is
       corrected to what shipped>.
 ```
@@ -81,7 +81,7 @@ criterion, and the re-triage's first checklist item is the backstop.
 
 ## Closing re-triage issue
 
-Title: `Group <N>: closing re-triage of the roadmap`. Labels `<feature type label>` and
+Title: `Group <N>: closing re-triage of the roadmap`. Labels `<FILL: feature type label>` and
 `ready-for-agent`. Blocked by every other sub-issue of the group.
 
 ```markdown

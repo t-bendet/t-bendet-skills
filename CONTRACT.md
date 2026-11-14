@@ -6,7 +6,7 @@ the interface: rename one in a guide and the skill that cites it stops finding i
 
 `setup-t-bendet-skills` scaffolds the guides a repo lacks from the templates in
 [its folder](skills/setup-t-bendet-skills/). `scripts/check-contract.sh <repo>` reports every
-required name a repo is missing.
+required name a repo is missing and every `<FILL: ...>` marker a template left unfilled.
 
 ## Guides
 
@@ -36,6 +36,8 @@ Operations:
 - **Make an issue a sub-issue of a parent**, **List a parent's sub-issues**
 - **Blocking**, **List a ticket's blockers**, **Count open blockers**
 - **Watch CI**
+- **Merge a PR**: either an auto-merge form, issued before the checks finish, or a direct form,
+  issued only once they are green.
 
 Sections:
 

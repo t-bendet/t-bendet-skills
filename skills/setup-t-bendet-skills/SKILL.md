@@ -17,10 +17,12 @@ supplying only what the repo cannot show.
   absent: it is user-invoked, so ask the user to run it, and stop until that guide exists.
 - Ask which of the three skills this repo will use; the contract's **Guides** section says which
   guides each needs.
-- Run `scripts/check-contract.sh <repo> <skills>` from this plugin's root. Its `MISSING` lines are
-  the gap list.
+- Run [check-contract.sh](../../scripts/check-contract.sh) as `check-contract.sh <repo> <skills>`.
+  Its `MISSING` lines are the gap list.
 - Gather evidence for each gap: the default branch and branch protection (`gh repo view`,
-  `git remote show origin`), the scripts in the package manifest, the CI workflow's jobs, an
+  `git remote show origin`), the merge settings that pick the **Merge a PR** form
+  (`gh api repos/<owner>/<repo> --jq '{allow_auto_merge, allow_squash_merge, allow_merge_commit, allow_rebase_merge}'`
+  and the base branch's required checks), the scripts in the package manifest, the CI workflow's jobs, an
   existing roadmap or backlog file, the client's layout, API-client and router files, the E2E
   package and its seeded user fixture.
 
@@ -35,7 +37,8 @@ the roadmap lives, which middleware blocks the route commit.
 ## 3. Draft and confirm
 
 Draft each missing guide from its template in [templates/](templates/), replacing every
-`<placeholder>` with the repo's fact:
+`<FILL: ...>` marker with the repo's fact and leaving the other `<...>` placeholders, which belong
+to the issue templates and commands:
 
 | Gap                                          | Template                                                           |
 | -------------------------------------------- | ------------------------------------------------------------------ |
@@ -63,9 +66,8 @@ or `CLAUDE.md` when that is the one that exists), worded by when to read it:
 | UI or loading prototypes | [Prototype harness guide](docs/agents/prototype-harness.md) |
 ```
 
-Done when `scripts/check-contract.sh <repo> <skills>` prints `contract satisfied` and no
-`<placeholder>` is left in a written guide (`grep -n '<[a-z][^>]*>' docs/agents/*.md` shows only
-placeholders the templates mean to keep, such as `<type>/<issue#>-<slug>`).
+Done when `check-contract.sh <repo> <skills>` prints `contract satisfied`: every required name is
+present and no `<FILL:` marker is left.
 
 ## 5. Report
 

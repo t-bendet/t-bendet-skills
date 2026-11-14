@@ -7,6 +7,7 @@ repo="${1:?usage: check-contract.sh <repo> [skill...]}"
 shift
 skills="${*:-batch-tickets roadmap-batch prototype-harness}"
 missing=0
+roadmap=""
 
 need() {
   local file="$1" pattern="$2" label="$3"
@@ -40,7 +41,7 @@ for skill in $skills; do
     batch-tickets)
       for name in "Read an issue" "List issues" "Comment on an issue" \
         "List a parent's sub-issues" "List a ticket's blockers" \
-        "Count open blockers" "Watch CI"; do
+        "Count open blockers" "Watch CI" "Merge a PR"; do
         operation "$tracker" "$name"
       done
       section "$tracker" "Branching"
@@ -61,7 +62,6 @@ for skill in $skills; do
         section "$group" "$name"
       done
       need "$group" "Merge policy: stop at PR open" "phrase 'Merge policy: stop at PR open'"
-      roadmap=""
       if [ -f "$repo/$group" ]; then
         roadmap=$(awk '/^## Roadmap file$/{on=1; next} /^## /{on=0} on' "$repo/$group" |
           grep -oE '`[^`]+\.md`' | head -1 | tr -d '`')
@@ -87,9 +87,17 @@ for skill in $skills; do
   esac
 done
 
+for file in "$tracker" "$verification" "$group" "$labels" "$harness" "${roadmap:-}"; do
+  [ -n "$file" ] && [ -f "$repo/$file" ] || continue
+  while IFS= read -r line; do
+    echo "UNFILLED $file:$line"
+    missing=$((missing + 1))
+  done < <(grep -n -- '<FILL:' "$repo/$file" | cut -c1-90)
+done
+
 if [ "$missing" -eq 0 ]; then
   echo "contract satisfied for: $skills"
 else
-  echo "$missing required name(s) missing for: $skills"
+  echo "$missing required name(s) missing or unfilled for: $skills"
   exit 1
 fi

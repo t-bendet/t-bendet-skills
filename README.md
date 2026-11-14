@@ -37,9 +37,15 @@ the guides and the exact section and operation names the skills cite.
 
    Name skills after the path to check only those: `scripts/check-contract.sh /path/to/repo batch-tickets`.
 
-The repo is laid out as a plugin (`skills/<name>/SKILL.md`) but ships no plugin manifest yet; until
-it does, copy or symlink a skill folder together with `CONTRACT.md` into the repo's skills
-directory.
+The repo is laid out as a plugin (`skills/<name>/SKILL.md`) but ships no plugin manifest yet. Until
+it does, clone it and symlink each skill folder into the repo's skills directory:
+
+```bash
+ln -s /path/to/t-bendet-skills/skills/batch-tickets .claude/skills/batch-tickets
+```
+
+Symlink, do not copy: the skills link to `CONTRACT.md` and `scripts/` two levels above their own
+folder, which resolves through a symlink and breaks in a copy.
 
 ## License
 

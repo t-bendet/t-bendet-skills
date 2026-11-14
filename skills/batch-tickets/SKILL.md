@@ -35,7 +35,7 @@ The repo's facts live in its guides, per the [guide contract](../../CONTRACT.md)
      ticket's blockers** in the issue-tracker guide. Do not ask for approval of the list — print it
      and proceed.
      The **merge policy** is `merge` unless the arguments say `open` (or "stop at PR open"): `merge`
-     lands each PR through auto-merge, as in _Land_; `open` leaves every PR open for a human.
+     lands each PR with the guide's **Merge a PR**, as in _Land_; `open` leaves every PR open for a human.
      Under `merge`, a ticket whose body carries `Merge policy: stop at PR open` (the
      roadmap group guide, `docs/agents/roadmap-group.md`, puts it on a group's closing
      re-triage and on the first slice that introduces a new seam) is the exception: its PR is left open for review,
@@ -121,16 +121,20 @@ git add <the paths the implementer reported>   # never `git add -A` — unrelate
 git commit   # conventional-commit subject; body ends with "Closes #N"
 git push -u origin <branch>
 gh pr create --base <base> --title "<type>: <subject>" --body-file <prepared-body-file>
-gh pr merge <pr> --auto --squash --delete-branch   # merge policy `merge` only
+<merge command>   # **Merge a PR** in the issue-tracker guide; merge policy `merge` only
 gh pr checks <pr> --watch
-gh pr view <pr> --json state --jq .state   # repeat until MERGED; auto-merge fires after CI
+gh pr view <pr> --json state --jq .state   # repeat until MERGED
 git switch <base> && git pull && git branch -D <branch>
-git fetch --prune   # GitHub deleted the remote branch; this clears the stale tracking ref
+git fetch --prune   # clears the tracking ref of a remote branch deleted on merge
 ```
+
+The guide's **Merge a PR** is one of two forms. An auto-merge form is issued before the watch, as
+above. A direct form is issued only after the watch exits green, so swap those two lines. A merge
+issued on checks nobody watched is merging red.
 
 Touch local branches only once the state is `MERGED`: deleting the head branch of an open PR closes
 it. When pushes to `<base>` run CI, watch that run in the background (**Watch CI** in the issue-tracker guide, on `<base>`) and start the next ticket. Before the next PR's
-`gh pr merge --auto`, confirm that watch exited green.
+merge, confirm that watch exited green.
 
 Under `open`, skip auto-merge and stop after the checks: record the PR link and its check result,
 `git switch <base> && git pull`, and leave the branch for the reviewer. A red check is a miss under

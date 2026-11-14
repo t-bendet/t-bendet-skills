@@ -66,7 +66,8 @@ shown on one route. Add the session's local state alongside that control.
 ## Screenshot matrix
 
 Fill the `repo` block at the top of the copied `shots.mjs` from the guide's **Screenshot run**.
-Use the repo's Node version, start the local API and the Vite dev client (a production preview
+Use a Node that runs TypeScript files directly (22.18 or newer), since the script imports
+`config.ts`; start the local API and the Vite dev client (a production preview
 hides the bar), then run:
 
 ```sh
