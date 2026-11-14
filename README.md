@@ -40,3 +40,7 @@ the guides and the exact section and operation names the skills cite.
 The repo is laid out as a plugin (`skills/<name>/SKILL.md`) but ships no plugin manifest yet; until
 it does, copy or symlink a skill folder together with `CONTRACT.md` into the repo's skills
 directory.
+
+## License
+
+[MIT](LICENSE)
