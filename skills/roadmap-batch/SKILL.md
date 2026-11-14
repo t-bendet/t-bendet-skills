@@ -23,12 +23,14 @@ name stops the skill: tell the user to run `setup-t-bendet-skills`.
   come from, and holds the parent, slice and closing re-triage templates.
 - The spec template lives in `mattpocock-skills:to-spec`; the issue template and blocking-edge
   rules live in `mattpocock-skills:to-tickets`. Both are user-invoked, so read their `SKILL.md`
-  files rather than invoking them: `skills/engineering/<name>/SKILL.md` under the plugin's
-  `installPath` in `~/.claude/plugins/installed_plugins.json`.
+  files rather than invoking them: `skills/*/<name>/SKILL.md` under the plugin's `installPath` in
+  `~/.claude/plugins/installed_plugins.json`.
 
 ## 1. Interview
 
-Ask all five in one message and wait. Each answer is the user's call; ask again for any left blank.
+Ask all five in one message, each with a recommended answer, and wait. Each answer is the user's
+call: ask again for any left blank. A user who **delegates** the choices gets the recommendations,
+printed back as the answers before step 2.
 
 1. **Count**: how many items this batch takes.
 2. **Selection criteria**: independence (no shared files), blast radius, one codebase area, or the
@@ -36,9 +38,9 @@ Ask all five in one message and wait. Each answer is the user's call; ask again 
 3. **Spec depth** per issue: the full `mattpocock-skills:to-spec` template, or acceptance criteria
    only (the `mattpocock-skills:to-tickets` issue template).
 4. **Approval**: show each drafted issue body for approval before filing, or file directly.
-5. **Merge policy** for the batch: auto-merge on green, or stop at PR open.
+5. **Merge policy** for the batch: merge on green, or stop at PR open.
 
-Done when all five have an explicit answer.
+Done when all five have an answer the user gave or delegated.
 
 ## 2. Propose candidates
 
@@ -51,7 +53,7 @@ Then present, as numbered lists:
   everything under "Parked". The roadmap's "How the roadmap is worked" section names the skill for
   that group; tell the user to run it, and keep those items out of this batch.
 - **Shared files**: each pair of candidates that touches the same file, which needs a blocking edge
-  or an agreed order.
+  or an agreed order. The roadmap file is exempt: every slice edits it.
 
 Iterate until the user approves a list and its order. That approval is the permission to file.
 
@@ -74,7 +76,8 @@ For each approved item, in the approved order:
 4. **File it** per the issue-tracker guide with that label pair.
 
 Once every issue has a number, **wire the blocking edges** between the shared-file pairs in a second
-pass, blocker first in the approved order. Leave the roadmap line in place: each ticket's own PR
+pass, blocker first in the approved order; confirm each edge with **List a ticket's blockers**,
+since the open-blocker count lags a new edge. Leave the roadmap line in place: each ticket's own PR
 removes it, so the roadmap tracks what has landed.
 
 Done when every approved item has an issue number, its label pair, and its edges.
@@ -87,6 +90,6 @@ print the mapping of roadmap item to issue number so the user can follow the bat
 ## Do not
 
 - file an issue the user has not approved in step 2, or more issues than the agreed count
-- fill in an interview answer the user left open; ask again instead
+- fill in an interview answer the user neither gave nor delegated; ask again instead
 - remove roadmap lines at filing time; the ticket's PR does that
 - change the roadmap, other skills, or the guides this skill points at

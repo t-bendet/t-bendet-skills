@@ -5,7 +5,7 @@
 ## How the roadmap is worked
 
 **One group at a time.** A group becomes a parent issue, one sub-issue per vertical slice and a
-closing re-triage, in the shapes the [roadmap group guide](agents/roadmap-group.md) holds. The
+closing re-triage, in the shapes the [roadmap group guide](<FILL: path from this file to docs/agents/roadmap-group.md>) holds. The
 parent issue is where the group's decisions live; this file names the questions, never the
 answers. A slice's PR removes its item line here and corrects any fact its change made false; the
 closing re-triage removes the group block.
@@ -22,8 +22,8 @@ closing re-triage removes the group block.
 **Closing re-triage.** The last ticket of every group; this checklist is its acceptance criteria:
 
 - [ ] Every item line of the group is gone from this file; any left is quoted in the PR with why.
-- [ ] The group block is removed, and each decision it settled is recorded where it lasts (an ADR,
-      a guide, the constraints below).
+- [ ] The group block is removed, and each decision it settled is recorded where it lasts (an ADR
+      or a guide).
 - [ ] Every remaining group is read against what shipped; facts the group made false are corrected.
 - [ ] The PR states whether the order of the remaining groups still holds, and closes #<parent>.
 

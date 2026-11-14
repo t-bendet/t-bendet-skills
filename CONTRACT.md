@@ -26,7 +26,8 @@ A repo needs only the guides of the skills it uses: `prototype-harness` needs th
 
 ## Required names
 
-Operations are bold lead-ins (`**Read an issue**`); sections are headings.
+An operation is a bullet that starts with its bold name (`- **Read an issue**: ...`); a mention
+in a sentence, or a bullet under `## Cloud sessions`, does not count. Sections are headings.
 
 ### `docs/agents/issue-tracker.md`
 
@@ -41,19 +42,23 @@ Operations:
 
 Sections:
 
-- `## Branching`: the base branch, the branch-name form, the commit-subject form, and the keyword
-  that closes an issue from a PR.
-- `## Cloud sessions` (optional): substitutes for operations that fail in a cloud session.
+- `## Branching`, the guide's last section: the base branch, a `Branch name:` paragraph, a
+  `Commit subjects` paragraph, and the keyword that closes an issue from a PR. All four are the
+  repo's own; the skills assume no form.
+- `## Cloud sessions` (optional): substitutes for operations that fail in a cloud session, each
+  under the operation's own name.
 
 ### `docs/agents/triage-labels.md`
 
 The label strings for the `ready-for-agent` and `ready-for-human` roles. A repo with type labels
-lists them here too, one of which marks a feature.
+lists them here too, one of which marks a feature. Every label named exists in the tracker.
 
 ### `docs/agents/verification.md`
 
 - `## Local checks`: the commands, and which apply to which kind of change.
-- `## CI coverage`: the required CI jobs and what local checks leave uncovered.
+- `## CI coverage`: the **required CI jobs** (those a PR must pass before **Merge a PR**, whether
+  branch protection enforces them or only the guide does), what local checks leave uncovered, and
+  whether a push to the base branch runs CI.
 - `## After a merge` (optional): one check that the merged change is live, such as a health URL.
 
 ### `docs/agents/roadmap-group.md`
@@ -76,17 +81,18 @@ criterion **quotes the roadmap line** its PR removes, and a ticket to be reviewe
 
 ### `docs/agents/prototype-harness.md`
 
-- `## Install sites`: the prototype folder, and the layout, API-client and router files the harness
-  touches.
+- `## Install sites`: the prototype folder, and the layout, API-client, router and query-client
+  files the harness touches.
 - `## Query keys`: the route-pattern to query-key mapping for cold-cache comparisons.
 - `## Screenshot run`: the dev origin, where Playwright resolves from, the sign-in request, the
-  output folder.
-- `## Lessons`: what earlier prototypes in this repo taught.
+  output folder. A repo without Playwright or a sign-in says so, and what a prototype branch adds.
+- `## Lessons`: what earlier prototypes in this repo taught; empty until the first one closes.
 
-## Outside the contract
+## The entrypoint
 
-A skill hands an implementer the repo's agent entrypoint (`AGENTS.md` or `CLAUDE.md`) and the task
-guides it routes to. Their shape is the repo's own.
+The repo's agent entrypoint (`AGENTS.md`, or `CLAUDE.md` where that is the only one) links every
+guide above that the repo has. A skill hands an implementer the entrypoint and the task guides it
+routes to; beyond those links, their shape is the repo's own.
 
 `mattpocock-skills` is required: `batch-tickets` uses its `pr` skill, `roadmap-batch` reads its
 `to-spec` and `to-tickets` templates, and its setup skill scaffolds the first two guides above.

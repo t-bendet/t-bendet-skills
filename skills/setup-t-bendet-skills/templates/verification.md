@@ -15,6 +15,9 @@ Run the checks the change affects. The ordinary sequence is:
 <FILL: format check command>
 ```
 
+<FILL: Name each kind of check above that the repo has no command for, e.g. "The repo has no
+formatter"; its line in the block is deleted.>
+
 | Change                 | Additional guidance                                     |
 | ---------------------- | ------------------------------------------------------- |
 | <FILL: kind of change> | <FILL: the guide to read, and any extra command to run> |
@@ -24,9 +27,10 @@ Run the checks the change affects. The ordinary sequence is:
 
 ## CI coverage
 
-<FILL: The required CI jobs by name, which of them the local sequence covers, and which have no local
-equivalent.> Report local checks separately from observed CI results; an unrun gate is reported as
-unrun.
+<FILL: The required CI jobs by name: the jobs a PR must pass before **Merge a PR**, whether branch
+protection enforces them or only this guide does. Which of them the local sequence covers, and which
+have no local equivalent.> <FILL: Whether a push to the base branch runs CI, and which jobs.> Report
+local checks separately from observed CI results; an unrun gate is reported as unrun.
 
 ## After a merge
 

@@ -21,7 +21,7 @@ ticket **deferred**, and the queue moves on.
 
 ## Before you start
 
-The repo's facts live in its guides, per the [guide contract](../../CONTRACT.md): the issue-tracker guide (`docs/agents/issue-tracker.md`) holds ticket operations and **Branching**, which names the base branch written `<base>` below; the verification guide (`docs/agents/verification.md`) holds **Local checks** and **CI coverage**. A missing guide or name stops the batch: tell the user to run `setup-t-bendet-skills`. The `gh` commands below are the GitHub form; on another tracker, or in a cloud session (`CLAUDE_CODE_REMOTE=true`, read the issue-tracker guide's **Cloud sessions** first), use the guide's operation of the same name.
+The repo's facts live in its guides, per the [guide contract](../../CONTRACT.md): the issue-tracker guide (`docs/agents/issue-tracker.md`) holds ticket operations and **Branching**, which names the base branch written `<base>` below and the branch-name, commit-subject and closing-keyword forms; the verification guide (`docs/agents/verification.md`) holds **Local checks** and **CI coverage**. A missing guide or name stops the batch: tell the user to run `setup-t-bendet-skills`. The `gh` commands below are the GitHub form; on another tracker, or in a cloud session (`CLAUDE_CODE_REMOTE=true`, read the issue-tracker guide's **Cloud sessions** first), use the guide's operation of the same name.
 
 1. **Confirm the queue and the merge policy.** Resolve `$ARGUMENTS` into a concrete list of numbers and titles, and print it for the user:
    - a label (`ready-for-agent`) → `gh issue list --state open --label <label> --json number,title`
@@ -45,7 +45,7 @@ The repo's facts live in its guides, per the [guide contract](../../CONTRACT.md)
      a `<base>` that lacks its blocker's change. Abort the batch if one is.
 2. **Check the tree is clean and `<base>` is current**: `git switch <base> && git pull`. Abort the whole
    batch if the tree is dirty; that is the user's uncommitted work.
-3. **Announce the gate**: identify the applicable local checks and required CI jobs from the verification guide. Local checks do not replace the CI jobs that have no local equivalent.
+3. **Announce the gate**: identify the applicable local checks and required CI jobs from the verification guide, and whether a push to `<base>` runs CI (its **CI coverage** says). Local checks do not replace the CI jobs that have no local equivalent.
 
 ## Per-ticket loop
 
@@ -53,7 +53,7 @@ For each issue number `N`, in order:
 
 ### 1. Read
 
-Read the issue body and comments now, not up front, using **Read an issue** in the issue-tracker guide; `gh issue view N --comments` alone may omit the body off a TTY. Extract the ask, acceptance criteria, and decisions. Pick the conventional-commit `<type>` matching the bulk of the change. A ticket blocked by a deferred ticket is deferred too.
+Read the issue body and comments now, not up front, using **Read an issue** in the issue-tracker guide; `gh issue view N --comments` alone may omit the body off a TTY. Extract the ask, acceptance criteria, and decisions. A ticket whose **premise** is wrong (what it asks for already exists, or cannot exist as written) still goes to the implementer, with the brief saying so; the report records the correction. A ticket blocked by a deferred ticket is deferred too.
 
 ### 2. Branch
 
@@ -62,8 +62,7 @@ git switch <base> && git pull
 git switch -c <branch>
 ```
 
-The issue-tracker guide's **Branching** section sets the branch name; without one, use
-`<type>/N-<slug>`, the slug 2–5 kebab-case words from the title.
+Name `<branch>` per **Branching**.
 
 ### 3. Delegate
 
@@ -118,19 +117,22 @@ report and `git diff --stat`, not from the diff. Follow attribution rules only w
 
 ```bash
 git add <the paths the implementer reported>   # never `git add -A` — unrelated untracked files exist
-git commit   # conventional-commit subject; body ends with "Closes #N"
+git commit   # subject per **Branching**; body ends with its closing keyword and N
 git push -u origin <branch>
-gh pr create --base <base> --title "<type>: <subject>" --body-file <prepared-body-file>
+gh pr create --base <base> --title "<commit subject>" --body-file <prepared-body-file>
 <merge command>   # **Merge a PR** in the issue-tracker guide; merge policy `merge` only
 gh pr checks <pr> --watch
 gh pr view <pr> --json state --jq .state   # repeat until MERGED
-git switch <base> && git pull && git branch -D <branch>
+git switch <base> && git pull
+git branch -D <branch>   # skip when the merge command already deleted it
 git fetch --prune   # clears the tracking ref of a remote branch deleted on merge
 ```
 
 The guide's **Merge a PR** is one of two forms. An auto-merge form is issued before the watch, as
-above. A direct form is issued only after the watch exits green, so swap those two lines. A merge
-issued on checks nobody watched is merging red.
+above. A direct form is issued only after the watch exits green, so swap those two lines; its
+`--delete-branch` also switches to `<base>` and deletes the local branch. A merge issued on checks
+nobody watched is merging red. A watch that exits 1 with "no checks reported" a few seconds after
+the PR opens is early, not red: watch again.
 
 Touch local branches only once the state is `MERGED`: deleting the head branch of an open PR closes
 it. When pushes to `<base>` run CI, watch that run in the background (**Watch CI** in the issue-tracker guide, on `<base>`) and start the next ticket. Before the next PR's
@@ -186,6 +188,8 @@ deferred), PR link, note — followed by:
 - every failed ticket with its open PR link and what a human needs to do
 - every deferred ticket with its resume condition
 - any ticket whose scope you narrowed, and what you left out
+- **premise corrections**: any ticket that asked for something that already existed or could not
+  exist as written, with what shipped instead
 
 Then offer to publish the report as an Artifact if the batch was more than a handful of tickets.
 

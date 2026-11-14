@@ -21,9 +21,9 @@ the guides and the exact section and operation names the skills cite.
 - The [`mattpocock-skills`](https://github.com/mattpocock/skills) plugin, set up in the repo with
   its own setup skill. These skills use its `pr`, `to-spec` and `to-tickets` skills and its
   issue-tracker and triage-label guides.
-- `gh` for GitHub-tracked repos.
+- `gh` for GitHub-tracked repos, and a CI workflow that runs on pull requests.
 - `prototype-harness` only: React, Vite, React Router middleware, TanStack Query, axios, Tailwind,
-  and Playwright for the screenshot matrix.
+  and Playwright for the screenshot matrix. A repo without that stack sets up the other skills alone.
 
 ## Install
 
@@ -46,10 +46,12 @@ marketplace at the same scope. Installed skills are named `t-bendet-skills:<name
    in `~/.claude/plugins/installed_plugins.json`):
 
    ```bash
-   scripts/check-contract.sh /path/to/repo
+   scripts/check-contract.sh /path/to/repo batch-tickets
    ```
 
-   Name skills after the path to check only those: `scripts/check-contract.sh /path/to/repo batch-tickets`.
+   Name the skills the repo uses after the path, as in
+   `scripts/check-contract.sh /path/to/repo batch-tickets roadmap-batch`; with none named it checks
+   all three.
 
 Without the plugin system, clone the repo and symlink each skill folder into the repo's skills
 directory:
